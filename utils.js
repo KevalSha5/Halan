@@ -1,7 +1,8 @@
 class Utils {
-    constructor(bot, client) {
+    constructor(bot, client, config) {
         this.bot = bot;
         this.client = client;
+        this.config = config;
     }
 
     getUser(username) {
@@ -9,7 +10,7 @@ class Utils {
     }
 
     removeBotName(content) {
-        return content.replace(this.bot.halanRegexp, "");
+        return content.replace(this.config.bot.regexp, "");
     }
 
     getTargetChannelAndClean(message) {

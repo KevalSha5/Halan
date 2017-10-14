@@ -50,12 +50,27 @@ let insults = [
     "@, up thine!"
 ];
 
+let dbConnection = bot.dbConnection;
+let table = "insults";
+let columns = ["insult"];
+
 let getRandomInsult = function(user) {
     return insults[Math.floor(Math.random()*insults.length)].replace("@", user);
 }
 
 let sendMessage = function(message) {
     if (!message.content.includes("insult")) return false;
+    
+    if (message.content.includes("insult add")) {
+        addInsult();
+        return true;
+    }
+
+    if (message.content.includes("insult getall")) {
+        getInsults();
+        return true;
+    }
+
     let isDM = message.channel.type === 'dm';
 
     let mentionedUsers = message.mentions.users;
@@ -75,6 +90,16 @@ let sendMessage = function(message) {
     }
 
     return true;
+}
+
+let addInsult = function(insult) {
+    let values = ["@New Insult"];
+    dbConnection.add(table, columns, values)
+}
+
+let getInsults = function() {
+    dbConnection.getAll(table, columns)
+        .then( rows => console.log(rows));
 }
 
 module.exports = {

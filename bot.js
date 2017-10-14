@@ -2,24 +2,13 @@ const config = require("./config.json");
 const Discord = require("discord.js");
 const client = new Discord.Client();
 const Utils = require("./utils.js");
-const utils = new Utils(this, client);
+const utils = new Utils(this, client, config);
+const DBConnection = require("./dbConnection.js");
+const dbConnection = new DBConnection(config.connection);
 
-let halanRegexp = /^ial(:?an)?\b/i; //Hal or Halan
-let admin = null;
-
-var mysql      = require('mysql');
-const connection = mysql.createConnection({
-  host     : 'localhost',
-  user     : 'root',
-  password : 'password',
-  database : 'ialan',
-});
-
-connection.connect(function(err) {
-  // connected! (unless `err` is set)
-  console.log(err);
-});
-
+module.exports.client = client;
+module.exports.utils = utils;
+module.exports.dbConnection = dbConnection;
 
 let defaultResponder = require("./onMessageListeners/confused.js");
 
@@ -37,12 +26,14 @@ let onPresenceUpdateListeners = [
 ];
 
 let onReady = function () {
-    console.log("Halan Online!");
-    admin = client.users.get("115308057994592259"); //Ursoc's Id
+    console.log(config.bot.name + " Online!");
 }
 
+let botRegex = new RegExp(config.bot.regexp, "i");
+
 let notifyOnMessageListeners = function(message) {
-    if (!message.content.match(halanRegexp) || message.author.bot) return;
+
+    if (!botRegex.test(message.content) || message.author.bot) return;
 
     utils.removeBotName(message.content);
     utils.resolveToMentions(message);
@@ -67,8 +58,4 @@ client.on("ready", () => { onReady(); });
 client.on("message", (message) => { notifyOnMessageListeners(message); });
 client.on("presenceUpdate", (oldGuildMember, newGuildMember) => { notifyOnPressenceUpdateLisenters });
 
-client.login(config.token);
-module.exports.halanRegexp = halanRegexp;
-module.exports.client = client;
-module.exports.utils = utils;
-module.exports.connection = connection;
+client.login(config.discordToken);
