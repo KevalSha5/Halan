@@ -1,0 +1,18 @@
+{
+    "discordToken": "MzY0MjE0OTQ5NzMzNzI4MjYw.DMIL2Q.XF8H3KHtHODHCmtZAEt7uARWPLk",
+    "bot": {
+        "name": "Kalan",
+        "regexp": "^kal(:?an)?\\b"
+    },
+    "youtubeOpts": {
+        "masRexults": "1",
+        "type": "video",
+        "key": "AIzaSyA2U3eCSlTr2o9NkyT6rpmH4mQ84bzf9SM"
+    },
+    "connection": {
+        "host": "localhost",
+        "user": "root",
+        "password": "password",
+        "database": "kalan"
+    }
+}
